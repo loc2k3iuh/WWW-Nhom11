@@ -1,6 +1,7 @@
 package com.project.shopapp.dtos.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +22,11 @@ public class UserLoginDTO {
     @NotBlank(message = "Password is required")
     @JsonProperty("password")
     String passWord;
+
+
+    @Min(value = 1, message = "You must enter role's Id")
+    @JsonProperty("role_id")
+    int roleId;
 
 
 }

@@ -1,6 +1,7 @@
 package com.project.shopapp.controllers;
 
 import com.github.javafaker.Faker;
+import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.dtos.requests.ProductDTO;
 import com.project.shopapp.dtos.requests.ProductImageDTO;
 import com.project.shopapp.dtos.responses.product.ProductListResponse;
@@ -36,6 +37,7 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
+    private final LocalizationUtils localizationUtils;
 
     @GetMapping("")
     public ResponseEntity<ProductListResponse> getAllProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {

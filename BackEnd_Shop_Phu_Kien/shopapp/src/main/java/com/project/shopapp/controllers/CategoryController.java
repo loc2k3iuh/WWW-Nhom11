@@ -1,14 +1,18 @@
 package com.project.shopapp.controllers;
 
+import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.dtos.requests.CategoryDTO;
+import com.project.shopapp.dtos.responses.category.UpdateCategoryResponse;
 import com.project.shopapp.models.Category;
 import com.project.shopapp.services.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.List;
 
@@ -17,8 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 //@Validated
 public class CategoryController {
-
+    private final MessageSource messageSource;
+    private final LocaleResolver localeResolver;
     private final CategoryService categoryService;
+    private final LocalizationUtils localizationUtils;
 
     //    Thêm mới
     @PostMapping("")
@@ -43,9 +49,9 @@ public class CategoryController {
 
 //    Tìm kiếm danh mục theo id
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity<UpdateCategoryResponse> updateCategory(@PathVariable int id, @RequestBody CategoryDTO categoryDTO){
        Category category =  categoryService.updateCategory(id, categoryDTO);
-       return ResponseEntity.ok(category);
+       return ResponseEntity.ok(UpdateCategoryResponse.builder().message("category.update_category.update_successfully").build());
     }
 
 //    Xóa dữ liệu

@@ -1,5 +1,6 @@
 package com.project.shopapp.controllers;
 
+import com.project.shopapp.components.LocalizationUtils;
 import com.project.shopapp.dtos.requests.OrderDetailDTO;
 import com.project.shopapp.dtos.responses.orderdetail.OrderDetailResponse;
 import com.project.shopapp.services.orderdetail.OrderDetailService;
@@ -16,6 +17,7 @@ import java.util.List;
 public class OrderDetailController {
 
     private final OrderDetailService orderDetailService;
+    private final LocalizationUtils localizationUtils;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderDetail(@PathVariable("id") int orderId){

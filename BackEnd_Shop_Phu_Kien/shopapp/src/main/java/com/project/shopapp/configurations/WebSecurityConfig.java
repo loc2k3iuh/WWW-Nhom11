@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +42,7 @@ public class WebSecurityConfig {
                             String.format("%s/users/register", apiPrefix),
                             String.format("%s/users/login", apiPrefix))
                             .permitAll()
+                            .requestMatchers(GET, String.format("%s/roles**", apiPrefix)).permitAll()
                             .requestMatchers(GET, String.format("%s/categories**", apiPrefix)).hasAnyRole(Role.USER, Role.ADMIN)
                             .requestMatchers(POST, String.format("%s/categories/**", apiPrefix)).hasRole(Role.ADMIN)
                             .requestMatchers(PUT, String.format("%s/categories/**", apiPrefix)).hasRole(Role.ADMIN)
