@@ -14,7 +14,9 @@ import com.project.shopapp.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,6 +28,7 @@ public class ProductService implements IProductService {
     private final ProductImageRepository productImageRepository;
 
     @Override
+    @Transactional
     public Product createProduct(ProductDTO productDTO) throws Exception {
         Category existingCategory = categoryRepository
                 .findById(productDTO.getCategoryId())
@@ -50,11 +53,16 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest).map(ProductResponse::fromProduct);
+    public Page<ProductResponse> getAllProducts(String keyword,
+                                                int categoryId, PageRequest pageRequest) {
+        // Get the list of products by page, limit, and categoryId (if available)
+        Page<Product> productsPage;
+        productsPage = productRepository.searchProducts(categoryId, keyword, pageRequest);
+        return productsPage.map(ProductResponse::fromProduct);
     }
 
     @Override
+    @Transactional
     public Product updateProduct(int id, ProductDTO productDTO) throws Exception {
         Product existingProduct = getProductById(id);
         if(existingProduct != null) {
@@ -74,6 +82,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(int id) {
         Optional<Product> existingProduct = productRepository.findById(id);
         existingProduct.ifPresent(productRepository::delete);
@@ -87,6 +96,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public ProductImage createProductImage(int productId, ProductImageDTO productImageDTO) throws Exception {
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Product not found"));

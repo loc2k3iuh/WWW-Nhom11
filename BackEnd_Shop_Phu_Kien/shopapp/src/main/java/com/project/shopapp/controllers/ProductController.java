@@ -11,6 +11,7 @@ import com.project.shopapp.models.ProductImage;
 import com.project.shopapp.services.product.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.data.domain.Sort;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,12 +41,27 @@ public class ProductController {
     private final LocalizationUtils localizationUtils;
 
     @GetMapping("")
-    public ResponseEntity<ProductListResponse> getAllProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
-        PageRequest pageRequest = PageRequest.of(page, limit);
-        Page<ProductResponse> productPage = productService.getAllProducts(pageRequest);
-        int totalProducts = productPage.getTotalPages();
+    public ResponseEntity<ProductListResponse> getProducts(
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0", name = "category_id") int categoryId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        // Tạo Pageable từ thông tin trang và giới hạn
+        PageRequest pageRequest = PageRequest.of(
+                page, limit,
+                //Sort.by("createdAt").descending()
+                Sort.by("id").ascending()
+        );
+        Page<ProductResponse> productPage = productService.getAllProducts(keyword, categoryId, pageRequest);
+        // Lấy tổng số trang
+        int totalPages = productPage.getTotalPages();
         List<ProductResponse> products = productPage.getContent();
-        return ResponseEntity.ok(ProductListResponse.builder().products(products).totalProducts(totalProducts).build());
+        return ResponseEntity.ok(ProductListResponse
+                .builder()
+                .products(products)
+                .totalPages(totalPages)
+                .build());
     }
 
     @GetMapping("/{id}")
@@ -163,5 +179,22 @@ public class ProductController {
             }
         }
         return ResponseEntity.ok("Fake Products created successfully");
+    }
+
+    @GetMapping("/images/{imageName}")
+    public ResponseEntity<?> getImage(@PathVariable("imageName") String imageName) {
+        try {
+            Path imagePath = Paths.get("uploads/", imageName);
+            UrlResource resource = new UrlResource(imagePath.toUri());
+            if (resource.exists()) {
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+
+        }
     }
 }

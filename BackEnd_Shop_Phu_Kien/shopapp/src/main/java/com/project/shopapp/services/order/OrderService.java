@@ -11,6 +11,7 @@ import com.project.shopapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class OrderService  implements IOrderService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public OrderResponse createOrder(OrderDTO orderDTO) throws Exception {
         //tìm xem user'id có tồn tại ko
         User user = userRepository
@@ -61,6 +63,7 @@ public class OrderService  implements IOrderService {
 
     
     @Override
+    @Transactional
     public OrderResponse updateOrder(int id, OrderDTO orderDTO) throws DataNotFoundException {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find order with id: " + id));
@@ -76,6 +79,7 @@ public class OrderService  implements IOrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(int id) {
         Order order = orderRepository.findById(id).orElse(null);
         //no hard-delete, => please soft-delete

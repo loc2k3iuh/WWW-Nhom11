@@ -13,5 +13,5 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductListResponse {
     List<ProductResponse> products;
-    int totalProducts;
+    int totalPages;
 }

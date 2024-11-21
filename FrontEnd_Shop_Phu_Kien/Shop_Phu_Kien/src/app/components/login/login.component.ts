@@ -3,10 +3,10 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginDTO } from '../../dtos/user/login.dto';
 import { Component, ViewChild } from '@angular/core';
-import { UserService } from '../../service/user.service';
-import { TokenService } from './../../service/token.service';
+import { UserService } from '../../services/user.service';
+import { TokenService } from '../../services/token.service';
 import { LoginResponse } from '../../responses/user/login.response';
-import { RoleService } from 'src/app/service/role.service';
+import { RoleService } from 'src/app/services/role.service';
 import { Role } from '../../models/role'; // Đường dẫn đến model Role
 
 
