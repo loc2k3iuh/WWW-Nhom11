@@ -18,6 +18,7 @@ import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -110,6 +111,11 @@ public class ProductService implements IProductService {
             throw new InvalidParamException("Maximum images per product is " + ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
         }
         return productImageRepository.save(newProductImage);
+    }
+
+    @Override
+    public List<Product> findProductsBuIds(List<Integer> productIds) {
+        return productRepository.findProductsByIds(productIds);
     }
 
 

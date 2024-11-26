@@ -15,38 +15,34 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final UserRepository userRepository;
-
-    //    User's details are stored in the database
+    //user's detail object
     @Bean
     public UserDetailsService userDetailsService() {
-        return phoneNumber ->
-                userRepository.findByPhoneNumber(phoneNumber)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found with phone number: " + phoneNumber));
-
+        return phoneNumber -> userRepository
+                .findByPhoneNumber(phoneNumber)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(
+                                "Cannot find user with phone number = "+phoneNumber));
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-      return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService());
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider;
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config
+    ) throws Exception {
+        return config.getAuthenticationManager();
     }
-
 }
-

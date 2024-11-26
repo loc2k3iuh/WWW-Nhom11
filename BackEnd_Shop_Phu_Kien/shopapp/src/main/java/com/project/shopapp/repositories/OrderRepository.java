@@ -15,4 +15,11 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     //Tìm các đơn hàng của 1 user nào đó
     List<Order> findByUserId(int userId);
+
+    @Query("SELECT o FROM Order o WHERE o.active = true AND (:keyword IS NULL OR :keyword = '' OR " +
+            "o.fullName LIKE %:keyword% " +
+            "OR o.address LIKE %:keyword% " +
+            "OR o.note LIKE %:keyword% " +
+            "OR o.email LIKE %:keyword%)")
+    Page<Order> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }

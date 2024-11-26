@@ -29,8 +29,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
@@ -195,6 +197,19 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
 
+        }
+    }
+
+    @GetMapping("/by_ids")
+    public ResponseEntity<?> getProductsByIds(@RequestParam("ids") String ids){
+        try {
+            List<Integer> productIds = Arrays.stream(ids.split(","))
+                    .map(Integer::parseInt)
+                    .toList();
+            List<Product> products = productService.findProductsBuIds(productIds);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+           return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

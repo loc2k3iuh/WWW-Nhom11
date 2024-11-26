@@ -1,7 +1,7 @@
 import { CartService } from './../../services/cart.service';
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/services/product.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from '../../models/product';
 import { ProductImage } from 'src/app/models/product.image';
 import { environment } from 'src/app/environments/environment';
@@ -21,17 +21,17 @@ export class DetailProductComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     // private categoryService: CategoryService,
-    // private router: Router,
-    // private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
 
   }
   ngOnInit() {
     // Lấy productId từ URL      
-    //const idParam = this.activatedRoute.snapshot.paramMap.get('id');
+    const idParam = this.activatedRoute.snapshot.paramMap.get('id');
     debugger
     //this.cartService.clearCart();
-    const idParam = 4765 //fake tạm 1 giá trị
+
     if (idParam !== null) {
       this.productId = +idParam;
     }
@@ -111,6 +111,6 @@ export class DetailProductComponent implements OnInit {
   }
 
   buyNow(): void {
-    // Thực hiện xử lý khi người dùng muốn mua ngay
+    this.router.navigate(['/orders']);
   }
 }

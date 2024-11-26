@@ -96,6 +96,6 @@ export class HomeComponent implements OnInit {
   onProductClick(productId: number) {
     debugger
     // Điều hướng đến trang detail-product với productId là tham số
-    this.router.navigate(['/detail-product', productId]);
-  }
+    this.router.navigate(['/products', productId]);
+  }  
 }

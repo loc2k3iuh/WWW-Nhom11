@@ -29,8 +29,8 @@ public class OrderController {
                 List<String> errorMessages =  bindingResult.getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            OrderResponse orderResponse = orderService.createOrder(orderDTO);
-            return ResponseEntity.ok(orderResponse);
+            Order order = orderService.createOrder(orderDTO);
+            return ResponseEntity.ok(order);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -39,8 +39,8 @@ public class OrderController {
     @GetMapping("user/{user_id}")
     public ResponseEntity<?> getOrdersByUser(@Valid @PathVariable("user_id") int userId){
        try {
-            List<OrderResponse> orderResponses = orderService.findByUserId(userId);
-            return ResponseEntity.ok(orderResponses);
+            List<Order> orders = orderService.findByUserId(userId);
+            return ResponseEntity.ok(orders);
        }catch (Exception e){
            return ResponseEntity.badRequest().body(e.getMessage());
        }
@@ -49,7 +49,8 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrder(@Valid @PathVariable("id") int userId){
         try {
-            OrderResponse orderResponse = orderService.getOrder(userId);
+            Order order = orderService.getOrder(userId);
+            OrderResponse orderResponse = OrderResponse.fromOrder(order);
             return ResponseEntity.ok(orderResponse);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -59,8 +60,8 @@ public class OrderController {
     @GetMapping("")
     public ResponseEntity<?> getAllOrders(){
         try {
-            List<OrderResponse> orderResponses = orderService.getAllOrders();
-            return ResponseEntity.ok(orderResponses);
+            List<Order> orders = orderService.getAllOrders();
+            return ResponseEntity.ok(orders);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -69,8 +70,8 @@ public class OrderController {
     @PutMapping("/{order_id}")
     public ResponseEntity<?> updateOrder(@Valid @PathVariable("order_id") int orderId, @Valid @RequestBody OrderDTO orderDTO){
         try {
-            OrderResponse orderResponse = orderService.updateOrder(orderId, orderDTO);
-            return ResponseEntity.ok(orderResponse);
+            Order order = orderService.updateOrder(orderId, orderDTO);
+            return ResponseEntity.ok(order);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -85,4 +86,6 @@ public class OrderController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }

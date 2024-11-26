@@ -5,12 +5,17 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { DetailProductComponent } from './components/detail-product/detail-product.component';
 import { OrderComponent } from './components/order/order.component';
-import { OrderConfirmComponent } from './components/order-confirm/order-confirm.component';
+import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { SliderComponent } from './components/slider/slider.component';
+import { ReactiveFormsModule  } from '@angular/forms';
+import { AppComponent } from './app/app.component';
+import { AppRoutingModule } from './app-routing.module';
+
 
 
 
@@ -22,14 +27,18 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     FooterComponent, 
     DetailProductComponent, 
     OrderComponent, 
-    OrderConfirmComponent, 
+    OrderDetailComponent, 
     LoginComponent, 
-    RegisterComponent
+    RegisterComponent, 
+    SliderComponent, 
+    AppComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -38,11 +47,13 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
   }],
   bootstrap: [
     // HomeComponent,
-    DetailProductComponent,
+    // DetailProductComponent,
     // OrderComponent,
-    //OrderConfirmComponent,
+    // OrderDetailComponent,
     // LoginComponent,
     // RegisterComponent
+    // SliderComponent
+    AppComponent
   ]
 })
 export class AppModule { }

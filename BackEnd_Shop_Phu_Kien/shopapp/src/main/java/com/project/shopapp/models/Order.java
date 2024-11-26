@@ -1,9 +1,12 @@
 package com.project.shopapp.models;
-import jakarta.persistence.*;
-import lombok.*;
 
+
+import lombok.*;
+import java.util.List;
 import java.time.LocalDate;
-import java.util.Date;
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "orders")
@@ -27,7 +30,7 @@ public class Order {
     @Column(name = "email", length = 100)
     private String email;
 
-    @Column(name = "phone_number", nullable = false, length = 100)
+    @Column(name = "phone_number",nullable = false, length = 100)
     private String phoneNumber;
 
     @Column(name = "address", length = 100)
@@ -36,7 +39,7 @@ public class Order {
     @Column(name = "note", length = 100)
     private String note;
 
-    @Column(name = "order_date")
+    @Column(name="order_date")
     private LocalDate orderDate;
 
     @Column(name = "status")
@@ -61,5 +64,9 @@ public class Order {
     private String paymentMethod;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active;//thuộc về admin
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<OrderDetail> orderDetails;
 }
